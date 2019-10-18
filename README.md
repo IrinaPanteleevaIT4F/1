@@ -1,4 +1,4 @@
 # 1
-My first repoooo
+My first attempt
 Hello, world!
 
