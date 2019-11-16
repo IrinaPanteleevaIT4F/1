@@ -16,6 +16,8 @@
 
 
 
+
+
 ШАГ 2. Обработка данных 
 
 Если данные получены в формате .xlsx необходимо проверить сами данные на их корректность представления
@@ -46,6 +48,7 @@
 
 
 
+
 ШАГ 3. Создание таблицы в Postgresql
 
 1.Открываем Postgresql, вводим пароль(который был введен при установке СУБД)
@@ -65,116 +68,363 @@
 Аналогично создаются таблицы credit_events1 и scale_EXP_task1
 
 
-
 СКРИПТЫ для ШАГА 3.
 
 CREATE TABLE public.rating_task1
+
 (
     "RAT_ID" smallint NOT NULL,
+
     "GRADE" text COLLATE pg_catalog."default",
+
     "OUTLOOK" text COLLATE pg_catalog."default",
+
     "CHANGE" text COLLATE pg_catalog."default",
+
     "DATE" date,
+
     "ENT_NAME" text COLLATE pg_catalog."default",
+
     "OKPO" integer,
+
     "OGRN" bigint,
+
     "INN" bigint,
+
     "FINST" integer,
+
     "AGENCY_ID" text COLLATE pg_catalog."default",
+
     "RAT_INDUSTRY" text COLLATE pg_catalog."default",
+
     "RAT_TYPE" text COLLATE pg_catalog."default",
+
     "HORIZON" text COLLATE pg_catalog."default",
+
     "SCALE_TYPER" text COLLATE pg_catalog."default",
+	
     "CURRENCY" text COLLATE pg_catalog."default",
+
     "BACKED_FLAG" text COLLATE pg_catalog."default",
+
     "COMPANY_ID" bigint NOT NULL,
+
     "ASSIGN_DATE" date
+
 )
+
 WITH (
+
     OIDS = FALSE
+
 )
+
 TABLESPACE pg_default;
 
 ALTER TABLE public.rating_task1
+
     OWNER to postgres;
 
 
 
 
 CREATE TABLE public.credit_events1
+
 (
+
     "INN" bigint,
+
     "DATE" date,
+
     "EVENT" text COLLATE pg_catalog."default"
+
 )
+
 WITH (
+
     OIDS = FALSE
+
 )
+
 TABLESPACE pg_default;
 
-ALTER TABLE public.credit_events1
-    OWNER to postgres;
 
+ALTER TABLE public.credit_events1
+
+    OWNER to postgres;
 
 
 
 
 CREATE TABLE public."scale_EXP_task1"
+
 (
+
     "GRADE" text COLLATE pg_catalog."default",
+
     "GRADE_ID" text COLLATE pg_catalog."default"
+
 )
+
 WITH (
+
     OIDS = FALSE
+
 )
+
 TABLESPACE pg_default;
 
+
 ALTER TABLE public."scale_EXP_task1"
+
     OWNER to postgres;
+
  
 
 
 
 Шаг 4. Импортирование данных из csv файла в созданную таблицу 
-1.	Кликаем правой кнопкой мыши по таблице, куда необходимо импортировать данные 
+
+1.Кликаем правой кнопкой мыши по таблице, куда необходимо импортировать данные 
 Кликаем по строчке IMPORT/EXPORT 
-2.	Открывается окно 
+
+2.Открывается окно 
+
 Для импортирования необходимо сдвинуть ползунок, теперь отображается IMPORT
+
 Далее выбираем файл, переходя в папку, где находится документ в формате csv, который необходимо импортировать  
+
 ФОРМАТ уже автоматически установлен csv
+
 ENCONDING выбираем WIN1251 
+
 HEADER сдвигаем ползунок на YES
+
 DELIMITER выбираем исходя из того, как сохраняется информация в csv файл на компьютере (чаще всего, сохраняется с делимитром ; )
+
 Соответственно, DELIMITER ; 
+
 Нажимаем ОК 
-3.	Если все подгрузилось, то СУБД напишет, что все успешно загружено в правом нижнем всплывающем окне 
+
+3.Если все подгрузилось, то СУБД напишет, что все успешно загружено в правом нижнем всплывающем окне 
+
 Если появляется ошибка, то надо читать какого рода ошибка и исправлять данные/таблицу
-4.	Если все успешно, то кликаем правой кнопкой мыши по названию таблицы, которое отображается слева в списке 
+
+4.Если все успешно, то кликаем правой кнопкой мыши по названию таблицы, которое отображается слева в списке 
+
 Нажимаем на строчку REFRESH 
+
 Кликаем еще раз по таблице 
+
 Кликаем по строчке VIEW/EDIT DATA… .All rows
-5.	В итоге СУБД отображает таблицу с импортированными данными 
+
+5.В итоге СУБД отображает таблицу с импортированными данными 
+
 
 Шаг 4 необходимо повторить для всех таблиц, созданных на шаге 3.
 
 
 
 
+
 ШАГ 5. Создание отдельной таблицы для информации о рейтингах (rating_info) и создание отдельной таблицы для информации о рейтингуемом лице(company_info)
+
 Для выполнения этого шага необходимо повторить аналогичные действия, как в шаге 3.
+
+СКРИПТЫ для ШАГА 5.
+
+CREATE TABLE public.rating_info
+
+(
+
+    "AGENCY_ID" text COLLATE pg_catalog."default",
+
+    "RAT_INDUSTRY" text COLLATE pg_catalog."default",
+
+    "RAT_TYPE" text COLLATE pg_catalog."default",
+
+    "HORIZON" text COLLATE pg_catalog."default",
+
+    "SCALE_TYPER" text COLLATE pg_catalog."default",
+
+    "CURRENCY" text COLLATE pg_catalog."default",
+
+    "BACKED_FLAG" text COLLATE pg_catalog."default"
+
+)
+
+WITH (
+
+    OIDS = FALSE
+
+)
+
+TABLESPACE pg_default;
+
+
+ALTER TABLE public.rating_info
+
+    OWNER to postgres;
+
+
+
+CREATE TABLE public.company_info
+
+(
+
+    "COMPANY_ID" bigint NOT NULL,
+
+    "ENT_NAME" text COLLATE pg_catalog."default",
+
+    "OKPO" integer,
+
+    "OGRN" bigint,
+
+    "INN" bigint,
+
+    "FINST" integer,
+
+    CONSTRAINT company_info_pkey PRIMARY KEY ("COMPANY_ID")
+
+)
+
+WITH (
+
+    OIDS = FALSE
+
+)
+
+TABLESPACE pg_default;
+
+
+ALTER TABLE public.company_info
+
+    OWNER to postgres;
+
+
+
 
 ШАГ 6. Перенесение данных из таблицы rating_task1 в rating_info
 
 
+СКРИПТ для  ШАГА 6.
+
+INSERT INTO rating_info ("AGENCY_ID",
+ 
+"RAT_INDUSTRY",
+ 
+"RAT_TYPE", 
+
+"HORIZON",
+ 
+"SCALE_TYPER",
+ 
+"CURRENCY",
+ 
+"BACKED_FLAG")
+
+SELECT "AGENCY_ID", 
+
+"RAT_INDUSTRY", 
+
+"RAT_TYPE", 
+
+"HORIZON", 
+
+"SCALE_TYPER",
+ 
+"CURRENCY",
+ 
+"BACKED_FLAG"
+
+FROM rating_task1
+
+
+
+
 ШАГ 7. Перенесение данных из таблицы rating_task1 в company_info
+
 Пояснение к скрипту
-Поскольку, одна и та же компания имеет различные рейтинги в таблице rating_task1, то при переносе данных из этой таблицы в таблицу company_info, произойдет дублирование информации о компании. Для того, чтобы этого не случилось необходимо применить OVER. OVER - нумерует уникальные группы значений, находит группы одинаковых строк, в выводе запроса одинаковые строки объединяет
+
+Поскольку, одна и та же компания имеет различные рейтинги в таблице rating_task1, то при переносе данных из этой таблицы в таблицу company_info, произойдет дублирование информации о компании. 
+
+Для того, чтобы этого не случилось необходимо применить OVER. 
+
+OVER - нумерует уникальные группы значений, находит группы одинаковых строк, в выводе запроса одинаковые строки объединяет
+
 Использование SELECT DISTINCT обусловлено тем, что необходимо сгруппировать данные по уникальному значению в одной строке. 
 
-Шаг 8. Связывание таблиц в базе данных через внешние ключи
-Первичный ключ должен быть уникальным для каждой компании и не должно быть пропусков значений, т.е. не допустимы null 
-Для создания первичного ключа используется скрипт (приложен в скриншотах)
-Пояснение к скрипту 
-Добавляется в исходную таблицу поля с кодами-ссылками на новую таблицу
-Затем заполняется поле с кодами-ссылками на новую таблицу и после присваивается полю ограничение внешнего ключа
+СКРИПТ для ШАГА 7.
+
+INSERT INTO company_info 
+
+SELECT COUNT(*) OVER (ORDER BY "ENT_NAME",
  
+					  "OKPO", 
+
+					  "OGRN", 
+
+					  "INN", 
+
+					  "FINST") as COMPANY_ID, 
+
+					  "ENT_NAME", 
+
+					  "OKPO", 
+
+					  "OGRN", 
+
+					  "INN", 
+
+					  "FINST"
+
+FROM (SELECT DISTINCT "ENT_NAME", 
+
+					  "OKPO", 
+
+					  "OGRN", 
+
+					  "INN", 
+
+					  "FINST"
+
+FROM rating_task1)
+
+AS my_select;
+
+
+
+
+Шаг 8. Связывание таблиц в базе данных через внешние ключи
+
+Пояснение к скрипту 
+
+Добавляется в исходную таблицу поля с кодами-ссылками на новую таблицу
+
+Затем заполняется поле с кодами-ссылками на новую таблицуи после присваивается полю ограничение внешнего ключа
+
+СКРИПТ для ШАГА 8.
+
+ALTER TABLE rating_task1 ADD COLUMN "COMPANY_ID" bigint;
+
+
+
+
+UPDATE rating_task1
+
+SET "COMPANY_ID"=company_info."COMPANY_ID"
+
+FROM company_info
+
+WHERE rating_task1."ENT_NAME"=company_info."ENT_NAME";
+
+
+
+
+ALTER TABLE public.rating_task1
+
+ADD CONSTRAINT fr_key_1 FOREIGN KEY ("COMPANY_ID") 
+
+REFERENCES public.company_info ("COMPANY_ID");
+
+
