@@ -110,10 +110,6 @@ CREATE TABLE public.rating_task1
 
     "BACKED_FLAG" text COLLATE pg_catalog."default",
 
-    "COMPANY_ID" bigint NOT NULL,
-
-    "ASSIGN_DATE" date
-
 )
 
 WITH (
@@ -388,5 +384,24 @@ ALTER TABLE public.rating_task1
 ADD CONSTRAINT fr_key_1 FOREIGN KEY ("COMPANY_ID") 
 
 REFERENCES public.company_info ("COMPANY_ID");
+
+
+ШАГ 9. Создание запроса, который выводит для выбранных вида рейтинга и даты все актуальные рейтинги.
+
+SELECT "ENT_NAME", "GRADE", "DATE"
+
+FROM rating_task1
+
+WHERE "DATE" < current_date 
+
+AND ("CHANGE" != 'снят' OR "CHANGE" != 'приостановлен')
+
+AND "RAT_ID" = 27
+
+Если необходимо выбрать другой тип рейтинга, то значение 27 в строчке "RAT_ID" заменяется на необходимое.
+
+Результат шага 9: данный запрос покажет список компаний с рейтингом на последнюю дату, предшествующую текущей дате при условии, что рейтинг не был "снят" или "приостановлен".
+
+
 
 
