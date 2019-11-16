@@ -388,17 +388,31 @@ REFERENCES public.company_info ("COMPANY_ID");
 
 ШАГ 9. Создание запроса, который выводит для выбранных вида рейтинга и даты все актуальные рейтинги.
 
-SELECT "ENT_NAME", "GRADE", "DATE"
+Пояснение к скрипту 
+
+Необходимо объединить несколько запросов с помощью INNER JOIN 
+
+SSELECT rating_task1."ENT_NAME", rating_task1."GRADE", rating_task1."DATE"
 
 FROM rating_task1
 
-WHERE "DATE" < current_date 
+INNER JOIN (SELECT "ENT_NAME", "GRADE", MAX("DATE") AS "ASSIGN_DATE"
 
-AND ("CHANGE" != 'снят' OR "CHANGE" != 'приостановлен')
+		   FROM rating_task1
 
-AND "RAT_ID" = 27
+		   GROUP BY "ENT_NAME", "GRADE")
+
+p ON rating_task1."ENT_NAME" = p."ENT_NAME" 
+
+AND rating_task1."GRADE" = P."GRADE"
+
+AND rating_task1."DATE"=p."ASSIGN_DATE"
+
+WHERE ("CHANGE" != 'снят' AND "CHANGE" != 'приостановлен') AND "RAT_ID" = 27
+
 
 Если необходимо выбрать другой тип рейтинга, то значение 27 в строчке "RAT_ID" заменяется на необходимое.
+
 
 Результат шага 9: данный запрос покажет список компаний с рейтингом на последнюю дату, предшествующую текущей дате при условии, что рейтинг не был "снят" или "приостановлен".
 
