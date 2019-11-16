@@ -309,33 +309,9 @@ ALTER TABLE public.company_info
 
 СКРИПТ для  ШАГА 6.
 
-INSERT INTO rating_info ("AGENCY_ID",
- 
-"RAT_INDUSTRY",
- 
-"RAT_TYPE", 
+INSERT INTO rating_info ("AGENCY_ID", "RAT_INDUSTRY", "RAT_TYPE", "HORIZON", "SCALE_TYPER", "CURRENCY", "BACKED_FLAG")
 
-"HORIZON",
- 
-"SCALE_TYPER",
- 
-"CURRENCY",
- 
-"BACKED_FLAG")
-
-SELECT "AGENCY_ID", 
-
-"RAT_INDUSTRY", 
-
-"RAT_TYPE", 
-
-"HORIZON", 
-
-"SCALE_TYPER",
- 
-"CURRENCY",
- 
-"BACKED_FLAG"
+SELECT "AGENCY_ID", "RAT_INDUSTRY", "RAT_TYPE", "HORIZON", "SCALE_TYPER", "CURRENCY", "BACKED_FLAG"
 
 FROM rating_task1
 
@@ -358,35 +334,9 @@ OVER - нумерует уникальные группы значений, на
 
 INSERT INTO company_info 
 
-SELECT COUNT(*) OVER (ORDER BY "ENT_NAME",
- 
-					  "OKPO", 
+SELECT COUNT(*) OVER (ORDER BY "ENT_NAME", "OKPO", "OGRN", "INN", "FINST") as COMPANY_ID, "ENT_NAME", "OKPO", "OGRN", "INN", "FINST"
 
-					  "OGRN", 
-
-					  "INN", 
-
-					  "FINST") as COMPANY_ID, 
-
-					  "ENT_NAME", 
-
-					  "OKPO", 
-
-					  "OGRN", 
-
-					  "INN", 
-
-					  "FINST"
-
-FROM (SELECT DISTINCT "ENT_NAME", 
-
-					  "OKPO", 
-
-					  "OGRN", 
-
-					  "INN", 
-
-					  "FINST"
+FROM (SELECT DISTINCT "ENT_NAME", "OKPO", "OGRN", "INN", "FINST"
 
 FROM rating_task1)
 
