@@ -392,7 +392,7 @@ REFERENCES public.company_info ("COMPANY_ID");
 
 Необходимо объединить несколько запросов с помощью INNER JOIN 
 
-SSELECT rating_task1."ENT_NAME", rating_task1."GRADE", rating_task1."DATE"
+SELECT rating_task1."ENT_NAME", rating_task1."GRADE", rating_task1."DATE"
 
 FROM rating_task1
 
