@@ -178,7 +178,6 @@ ALTER TABLE public."scale_EXP_task1"
 
     OWNER to postgres;
 
- 
 
 
 
@@ -192,8 +191,7 @@ ALTER DATABASE postgres SET datestyle TO "ISO, DMY";
 -- В одинарных кавычках после FROM прописывается путь к файлу на компьютере
 -- Если изначально в csv файле данные были разделены точкой с запятой, значит DELIMETER будет ";". В случае если использовался другой разделитель, то указывается соответствующий разделитель. 
 
-copy public.rating_task1  FROM '/opt/anaconda3/pkgs/conda-4.7.12-py37_0/info/test/tests/
-data/tar_traversal/dirsym/tmp/ratings_task.csv' 
+copy public.rating_task1  FROM '/opt/anaconda3/pkgs/conda-4.7.12-py37_0/info/test/tests/data/tar_traversal/dirsym/tmp/ratings_task.csv'' 
 
 DELIMITER ';' CSV HEADER ENCODING 'WIN 1251';
 
