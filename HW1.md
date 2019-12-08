@@ -381,12 +381,43 @@ WHERE rating_task1."ENT_NAME"=company_info."ENT_NAME";
 
 
 
-
 ALTER TABLE public.rating_task1
 
 ADD CONSTRAINT fr_key_1 FOREIGN KEY ("COMPANY_ID") 
 
 REFERENCES public.company_info ("COMPANY_ID");
+
+
+
+ALTER TABLE credit_events1 ADD COLUMN "ENT_NAME" text; 
+
+
+UPDATE credit_events1 SET "ENT_NAME" = company_info."ENT_NAME" 
+
+
+FROM company_info 
+
+
+WHERE credit_events1."INN" = company_info."INN";
+
+ALTER TABLE public.credit_events1 
+
+ADD CONSTRAINT fr_key_2 FOREIGN KEY ("ENT_NAME") REFERENCES public.company_info ("ENT_NAME"); 
+
+
+
+ALTER TABLE credit_events1 ADD COLUMN "GRADE" text; 
+
+UPDATE credit_events1
+
+SET "GRADE" = 'D' 
+
+WHERE "EVENT" = 'dft'; 
+
+ALTER TABLE public.credit_events1 
+
+ADD CONSTRAINT fr_key_3 FOREIGN KEY ("GRADE") REFERENCES public.scale_EXP_task1 ("GRADE");
+
 
 
 -- ШАГ 9. Создание запроса, который выводит для выбранных вида рейтинга и даты все актуальные рейтинги.
@@ -400,19 +431,22 @@ SELECT rating_task1."ENT_NAME", rating_task1."GRADE", rating_task1."DATE" AS "AS
 FROM rating_task1
 
 INNER JOIN (SELECT "ENT_NAME", MAX("DATE") AS "ASSIGN_DATE"
-
-		   FROM rating_task1
-
-		   GROUP BY "ENT_NAME")
+			
+			FROM rating_task1
+			
+			WHERE "RAT_ID" = 27
+			
+			AND "DATE" <= 2014/01/01
+			
+			GROUP BY "ENT_NAME")
 
 p ON rating_task1."ENT_NAME" = p."ENT_NAME" 
 
-
 AND rating_task1."DATE"=p."ASSIGN_DATE"
 
-WHERE ("CHANGE" != 'снят' AND "CHANGE" != 'приостановлен') AND "RAT_ID" = 27
+WHERE "CHANGE" != 'снят' AND "CHANGE" != 'приостановлен';
 
-;
+
 
 -- Если необходимо выбрать другой тип рейтинга, то значение 27 в строчке "RAT_ID" заменяется на необходимое.
 
